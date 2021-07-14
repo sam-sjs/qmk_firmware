@@ -54,7 +54,7 @@ enum tap_dance_codes {
 #define HYP_TAB HYPR_T(KC_TAB)
 #define CTL_DEL LCTL_T(KC_DEL)
 #define CTLBSLS RCTL_T(KC_BSLS)
-//#define SFT_CAP TD(SHIFT_CAPS)
+#define SFT_CAP TD(SHIFT_CAPS)
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SHIFT_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
@@ -207,14 +207,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-//uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-//  switch (keycode) {
-//    case SFT_CAP:
-//      return 250;
-//    default:
-//      return TAPPING_TERM;
-//  }
-//}
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case SFT_CAP:
+      return 250;
+    default:
+      return TAPPING_TERM;
+  }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
