@@ -36,6 +36,9 @@ enum planck_keycodes {
   PLOVER,
   BACKLIT,
   EXT_PLV,
+};
+
+enum tap_dance_codes {
   SHIFT_CAPS
 };
 
@@ -51,7 +54,11 @@ enum planck_keycodes {
 #define HYP_TAB HYPR_T(KC_TAB)
 #define CTL_DEL LCTL_T(KC_DEL)
 #define CTLBSLS RCTL_T(KC_BSLS)
-#define SFT_CAP TD(SHIFT_CAPS)
+//#define SFT_CAP TD(SHIFT_CAPS)
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [SHIFT_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -69,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_planck_grid(
     HYP_TAB, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     CTLESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    VIMSCSL, CTLQUOT,
-    SFT_CAP, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SHFTENT,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SHFTENT,
     BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   CMDLEFT, OPTDOWN, CTLUP,   KC_RGHT
 ),
 
@@ -196,22 +203,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   float plover_gb_song[][2]  = SONG(PLOVER_GOODBYE_SOUND);
 #endif
 
-qk_tap_dance_action_t tap_dance_actions[] = {
-  [SHIFT_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
-};
-
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case SFT_CAP:
-      return 250;
-    default:
-      return TAPPING_TERM;
-  }
-}
+//uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+//  switch (keycode) {
+//    case SFT_CAP:
+//      return 250;
+//    default:
+//      return TAPPING_TERM;
+//  }
+//}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
