@@ -26,7 +26,7 @@ enum planck_layers {
   _RAISE,
   _PLOVER,
   _ADJUST,
-  _VIM
+  _NAV
 };
 
 enum planck_keycodes {
@@ -50,11 +50,14 @@ enum tap_dance_codes {
 #define CTLESC LCTL_T(KC_ESC)
 #define CTLQUOT RCTL_T(KC_QUOT)
 #define SHFTENT RSFT_T(KC_ENT)
-#define VIMSCSL LT(_VIM, KC_SCLN)
-#define HYP_TAB HYPR_T(KC_TAB)
+#define NAVSCSL LT(_NAV, KC_SCLN)
+#define HYP_TAB LCAG_T(KC_TAB)
 #define CTL_DEL LCTL_T(KC_DEL)
 #define CTLBSLS RCTL_T(KC_BSLS)
 #define SFT_CAP TD(SHIFT_CAPS)
+#define COP_CAP LAG_T(KC_CAPS)
+#define CMD_OPT LCMD(KC_LOPT)
+#define COP_RGT LAG_T(KC_RGHT)
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SHIFT_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
@@ -75,9 +78,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = LAYOUT_planck_grid(
     HYP_TAB, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-    CTLESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    VIMSCSL, CTLQUOT,
-    SFT_CAP, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SHFTENT,
-    BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   CMDLEFT, OPTDOWN, CTLUP,   KC_RGHT
+    CTLESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    NAVSCSL, CTLQUOT,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SHFTENT,
+    COP_CAP, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   CMDLEFT, OPTDOWN, CTLUP,   COP_RGT
 ),
 
 /* Colemak
@@ -189,10 +192,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
 ),
 
-[_VIM] = LAYOUT_planck_grid(
-    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
-    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+[_NAV] = LAYOUT_planck_grid(
+    _______, _______, _______, _______, _______, _______, _______, KC_WH_U, _______, _______, _______, _______,
+    _______, _______, KC_HOME, KC_PGUP, KC_PGDN, KC_END,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_WH_D, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 )
 
@@ -210,7 +213,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case SFT_CAP:
-      return 250;
+      return 215;
     default:
       return TAPPING_TERM;
   }
@@ -325,7 +328,7 @@ bool encoder_update(bool clockwise) {
     return true;
 }
 
-void dip_switch_update_user(uint8_t index, bool active) {
+bool dip_switch_update_user(uint8_t index, bool active) {
     switch (index) {
         case 0: {
 #ifdef AUDIO_ENABLE
@@ -354,6 +357,7 @@ void dip_switch_update_user(uint8_t index, bool active) {
                 muse_mode = false;
             }
     }
+    return true;
 }
 
 void matrix_scan_user(void) {
